@@ -7,7 +7,7 @@ load_dotenv()
 
 # Set this to True for Gemini, False for Ollama
 USE_GEMINI = False
-GEMINI_ENV_API_KEY = "GEMINI_API_KEY"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 GEMINI_MODEL = "gemini-2.5-flash"
 OLLAMA_KEY = "ollama"
@@ -16,13 +16,13 @@ OLLAMA_URL = "http://localhost:11434/v1"
 
 if USE_GEMINI:
     llm = ChatOpenAI(
-        api_key=os.getenv(GEMINI_ENV_API_KEY),
+        api_key=GEMINI_API_KEY,
         base_url=GEMINI_URL,
         model=GEMINI_MODEL
     )
     # For script day 1 & 2
     client = OpenAI(
-        api_key=os.getenv(GEMINI_ENV_API_KEY),
+        api_key=GEMINI_API_KEY,
         base_url=GEMINI_URL
     )
     model = GEMINI_MODEL
