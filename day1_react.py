@@ -1,14 +1,5 @@
-import os
 import re
-from dotenv import load_dotenv
-from openai import OpenAI
-
-load_dotenv()
-
-client = OpenAI(
-    api_key=os.getenv("GEMINI_API_KEY"),
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
-)
+import config
 
 ### TOOLS ###
 def get_pokemon_type(name: str):
@@ -44,8 +35,8 @@ def run_agent(question):
     print(f"QUESTION: {question}")
 
     for _ in range(5): # Limit to 5 steps
-        response = client.chat.completions.create(
-            model="gemini-2.5-flash",
+        response = config.client.chat.completions.create(
+            model=config.model,
             messages=messages
         )
         
@@ -78,6 +69,7 @@ def run_agent(question):
 
 run_agent("What is the type of Charizard and how many letters are in its name?")
 
+### LOG RESULT with Gemini ###
 # QUESTION: What is the type of Charizard and how many letters are in its name?
 # THOUGHT: The user wants to know the type of Charizard and the length of its name. I can use `get_pokemon_type` for the type and `get_name_length` for the number of letters in "Charizard". I'll start by getting the type.
 # ACTION: get_pokemon_type(name='Charizard')
@@ -90,6 +82,7 @@ run_agent("What is the type of Charizard and how many letters are in its name?")
 
 run_agent("If you double the number of letters in 'Bulbasaur', what is the result?")
 
+### LOG RESULT with Gemini ###
 # QUESTION: If you double the number of letters in 'Bulbasaur', what is the result?
 # ACTION: get_name_length(text='Bulbasaur')
 # OBSERVATION: 9
@@ -98,6 +91,7 @@ run_agent("If you double the number of letters in 'Bulbasaur', what is the resul
 
 run_agent("What color is Pikachu?")
 
+### LOG RESULT with Gemini ###
 # QUESTION: What color is Pikachu?
 # THOUGHT: The user is asking for the color of Pikachu. I have access to `get_pokemon_type` and `get_name_length`. Neither of these tools can provide information about a Pokemon's color. Therefore, I cannot answer this question.
 # FINAL ANSWER: I am sorry, I cannot provide information about a Pokemon's color. My tools only allow me to get a Pokemon's type and the length of a name.

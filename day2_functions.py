@@ -1,14 +1,5 @@
-import os
 import json
-from dotenv import load_dotenv
-from openai import OpenAI
-
-load_dotenv()
-
-client = OpenAI(
-    api_key=os.getenv("GEMINI_API_KEY"),
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
-)
+import config
 
 ### 1. DEFINE TOOLS (The same Python functions) ###
 def get_pokemon_type(name: str):
@@ -25,7 +16,7 @@ def add_numbers(a: int, b: int):
     return a + b
 
 ### 2. THE TOOL DEFINITION (The Schema) ###
-# This tells Gemini exactly what the functions expect
+# This tells the LLM exactly what the functions expect
 tools = [
     {
         "type": "function",
@@ -76,14 +67,14 @@ def run_agent_v2(question):
     print(f"QUESTION: {question}")
 
     messages = [
-        {"role": "user", "content": question},
-        {"role": "system", "content": "Identify all required data points and call the necessary tools in parallel where possible."}
+        {"role": "system", "content": "Identify all required data points and call the necessary tools in parallel where possible."},
+        {"role": "user", "content": question}
     ]
 
     for _ in range(5):
         # Send the question + tool definitions
-        response = client.chat.completions.create(
-            model="gemini-2.5-flash",
+        response = config.client.chat.completions.create(
+            model=config.model,
             messages=messages,
             tools=tools,
             tool_choice="auto"
@@ -94,13 +85,13 @@ def run_agent_v2(question):
 
         tool_calls = response_message.tool_calls
 
-        # If Gemini don't want to call tool, print final answer
+        # If the LLM  don't want to call tool, print final answer
         if not tool_calls:
             print(f"\nFINAL ANSWER: {response_message.content}")
             break
 
         # Call tools
-        print(f"Gemini wants to call {len(tool_calls)} tool(s).")
+        print(f"The LLM wants to call {len(tool_calls)} tool(s).")
         messages.append(response_message)
 
         for tool_call in tool_calls:
@@ -117,7 +108,7 @@ def run_agent_v2(question):
             
             print(f"Executing {function_name} with {function_args} -> Result: {result}")
 
-            # Send the result back to Gemini
+            # Send the result back to the LLM
             messages.append({
                 "tool_call_id": tool_call.id,
                 "role": "tool",
@@ -125,10 +116,11 @@ def run_agent_v2(question):
                 "content": str(result),
             })
 
-#run_agent_v2("What is the type of Bulbasaur and how many letters are in its name?")
+run_agent_v2("What is the type of Bulbasaur and how many letters are in its name?")
 
+### LOG RESULT with Gemini ###
 # QUESTION: What is the type of Bulbasaur and how many letters are in its name?
-# Gemini wants to call 2 tool(s).
+# The LLM wants to call 2 tool(s).
 # TOOL: Calling get_pokemon_type for Bulbasaur
 # Executing get_pokemon_type with {'name': 'Bulbasaur'} -> Result: Grass/Poison
 # TOOL: Calling get_name_length for Bulbasaur
@@ -136,10 +128,11 @@ def run_agent_v2(question):
 # 
 # FINAL ANSWER: Bulbasaur is a **Grass/Poison** type Pokémon, and there are **9** letters in its name.
 
-#run_agent_v2("Compare the lengths of the names 'Bulbasaur', 'Charmander', and 'Squirtle'.")
+run_agent_v2("Compare the lengths of the names 'Bulbasaur', 'Charmander', and 'Squirtle'.")
 
+### LOG RESULT with Gemini ###
 # QUESTION: Compare the lengths of the names 'Bulbasaur', 'Charmander', and 'Squirtle'.
-# Gemini wants to call 3 tool(s).
+# The LLM wants to call 3 tool(s).
 # TOOL: Calling get_name_length for Bulbasaur
 # Executing get_name_length with {'text': 'Bulbasaur'} -> Result: 9
 # TOOL: Calling get_name_length for Charmander
@@ -160,13 +153,14 @@ def run_agent_v2(question):
 
 run_agent_v2("What is the sum of the number of letters in Pikachu and Bulbasaur?")
 
+### LOG RESULT with Gemini ###
 # QUESTION: What is the sum of the number of letters in Pikachu and Bulbasaur?
-# Gemini wants to call 2 tool(s).
+# The LLM wants to call 2 tool(s).
 # TOOL: Calling get_name_length for Pikachu
 # Executing get_name_length with {'text': 'Pikachu'} -> Result: 7
 # TOOL: Calling get_name_length for Bulbasaur
 # Executing get_name_length with {'text': 'Bulbasaur'} -> Result: 9
-# Gemini wants to call 1 tool(s).
+# The LLM wants to call 1 tool(s).
 # TOOL: Calling add_numbers for 7 + 9
 # Executing add_numbers with {'a': 7, 'b': 9} -> Result: 16
 # 
