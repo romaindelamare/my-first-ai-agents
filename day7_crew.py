@@ -1,7 +1,7 @@
 from crewai import Agent, Task, Crew, Process
 from config import crew_llm
 
-# Define the Specialist Agents
+# 1. Define the Specialist Agents
 researcher = Agent(
     role='Pokemon Data Researcher',
     goal='Retrieve the official type, height, and weight for {pokemon}.',
@@ -18,7 +18,7 @@ editor = Agent(
     verbose=True
 )
 
-# Define the Tasks
+# 2. Define the Tasks
 task_research = Task(
     description='Find the official stats for the Pokemon: {pokemon}.',
     expected_output='A raw list of type, height, and weight.',
@@ -32,14 +32,14 @@ task_edit = Task(
     context=[task_research] # This "plugs" the output of research into the editor
 )
 
-# 4. Assemble the Crew
+# 3. Assemble the Crew
 pokemon_crew = Crew(
     agents=[researcher, editor],
     tasks=[task_research, task_edit],
     process=Process.sequential # Task 1 -> Task 2
 )
 
-# 5. Kickoff!
+# 4. Start the work!
 result = pokemon_crew.kickoff(inputs={'pokemon': 'Squirtle'})
 print("### FINAL OUTPUT ###")
 print(result)
@@ -57,3 +57,23 @@ print(result)
 # | Substance | Water   |
 # | Length    | 0.5 m   |
 # | Mass      | 9.0 kg  |
+
+result = pokemon_crew.kickoff(inputs={'pokemon': 'Batman'})
+print("### FINAL OUTPUT ###")
+print(result)
+
+### LOG RESULT with Gemini ###
+### FINAL OUTPUT ###
+# **Research Audit Report: Unofficial Pokémon Data**
+# 
+# **Summary:**
+# This report audits the provided data for "Batman" within the context of the official Pokémon universe. Our rigorous audit confirms, based on verified Pokedex data, that "Batman" is not an official Pokémon species. Consequently, there are no official type, height, or weight statistics available for this entity within the established Pokémon canon. Any purported statistics would be unofficial and speculative, falling outside the scope of authenticated Pokedex records.  
+# 
+# **Detailed Statistics:**
+# 
+# | Attribute | Value | Notes                                       |
+# | :-------- | :---- | :------------------------------------------ |
+# | **Name**  | Batman| Not an official Pokémon species.            |
+# | **Type**  | N/A   | No official type data exists for unofficial entities. |
+# | **Height**| N/A   | No official height data exists for unofficial entities. |
+# | **Weight**| N/A   | No official weight data exists for unofficial entities. |
