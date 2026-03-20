@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Set this to True for Gemini, False for Ollama
-USE_GEMINI = False
+USE_GEMINI = True
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 GEMINI_MODEL = "gemini-2.5-flash"
@@ -15,6 +15,7 @@ OLLAMA_MODEL = "qwen3.5:2b"
 OLLAMA_URL = "http://localhost:11434/v1"
 
 if USE_GEMINI:
+    print("### Using Gemini API ###")
     llm = ChatOpenAI(
         api_key=GEMINI_API_KEY,
         base_url=GEMINI_URL,
@@ -27,6 +28,7 @@ if USE_GEMINI:
     )
     model = GEMINI_MODEL
 else:
+    print("### Using Ollama ###")
     llm = ChatOpenAI(
         api_key=OLLAMA_KEY,
         base_url=OLLAMA_URL,
