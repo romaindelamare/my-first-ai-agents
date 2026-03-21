@@ -1,9 +1,6 @@
 from crewai import Agent, Task, Crew
 from crewai.tools import tool
-from crewai_tools import SerperDevTool
 from config import crew_llm
-
-search_tool = SerperDevTool()
 
 @tool("calculate_battle_score")
 def calculate_battle_score(hp: int, attack: int, defense: int) -> str:
