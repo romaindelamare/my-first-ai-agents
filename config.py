@@ -18,7 +18,8 @@ if USE_GEMINI:
     print("### Using Gemini API ###")
     crew_llm = LLM(
         model=GEMINI_MODEL,
-        base_url=GEMINI_URL 
+        base_url=GEMINI_URL,
+        api_key=GEMINI_API_KEY
     )
     # For script day 3 to 5
     llm = ChatOpenAI(
@@ -36,7 +37,8 @@ else:
     print("### Using Ollama ###")
     crew_llm = LLM(
         model=f"ollama/{OLLAMA_MODEL}",
-        base_url=OLLAMA_URL 
+        base_url=OLLAMA_URL,
+        api_key=OLLAMA_KEY
     )
     # For script day 3 to 5
     llm = ChatOpenAI(
