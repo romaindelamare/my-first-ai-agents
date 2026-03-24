@@ -9,10 +9,12 @@ This repository documents a 30-day journey from basic LLM scripts to advanced mu
    - Models used:
      ```bash
      ollama pull qwen3.5:2b
+     ollama pull nomic-embed-text
      ```
 3. **API Keys**: Create a `.env` file in the root directory:
    ```env
    GEMINI_API_KEY=your_google_key_here
+   GOOGLE_API_KEY=your_google_key_here
    SERPER_API_KEY=your_serper_dev_key_here
    ```
 
@@ -24,7 +26,7 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
-pip install langchain-openai langchain-google-genai langgraph crewai "crewai[tools]" litellm python-dotenv
+pip install langchain-openai langchain-google-genai langgraph crewai "crewai[tools]" litellm python-dotenv google-generativeai ollama
 ```
 
 ## ⚙️ Configuration Strategy

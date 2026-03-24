@@ -6,7 +6,7 @@ from crewai import LLM
 
 load_dotenv()
 
-USE_GEMINI = True # True for Gemini, False for Ollama
+USE_GEMINI = False # True for Gemini, False for Ollama
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 GEMINI_MODEL = "gemini-2.5-flash"
@@ -21,6 +21,14 @@ if USE_GEMINI:
         base_url=GEMINI_URL,
         api_key=GEMINI_API_KEY
     )
+    crew_embedder = {
+        "provider": "google-generativeai",
+        "config": {
+            "model": "text-embedding-004",
+            "api_key": GEMINI_API_KEY
+        }
+    }
+    storage_path = "./.crewai_gemini"
     # For script day 3 to 5
     llm = ChatOpenAI(
         api_key=GEMINI_API_KEY,
@@ -40,6 +48,15 @@ else:
         base_url=OLLAMA_URL,
         api_key=OLLAMA_KEY
     )
+    os.environ["EMBEDDINGS_OLLAMA_MODEL_NAME"] = "nomic-embed-text"
+    crew_embedder = {
+        "provider": "ollama",
+        "config": {
+            "model": "nomic-embed-text",
+            "base_url": "http://localhost:11434"
+        }
+    }
+    storage_path = "./.crewai_ollama"
     # For script day 3 to 5
     llm = ChatOpenAI(
         api_key=OLLAMA_KEY,
