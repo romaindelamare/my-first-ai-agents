@@ -6,7 +6,7 @@ from crewai import LLM
 
 load_dotenv()
 
-USE_GEMINI = False # True for Gemini, False for Ollama
+USE_GEMINI = True # True for Gemini, False for Ollama
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 GEMINI_MODEL = "gemini-2.5-flash"

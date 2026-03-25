@@ -25,8 +25,12 @@ This repository documents a 30-day journey from basic LLM scripts to advanced mu
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
-pip install langchain-openai langchain-google-genai langgraph crewai "crewai[tools]" litellm python-dotenv google-generativeai ollama
+# Install Core Frameworks
+pip install crewai langgraph langchain-openai langchain-google-genai 
+# Install Essential Tools & Providers
+pip install "crewai[tools]" litellm python-dotenv google-generativeai ollama
+# Install Local Database & Memory Support (Crucial for Day 11+)
+pip install lancedb pyarrow
 ```
 
 ## ⚙️ Configuration Strategy
@@ -45,3 +49,9 @@ The project uses a central `config.py` to decouple the application logic from th
 | **6-7** | **Multi-Agent Crews** | `day6_crew.py`, `day7_crew.py` | Collaborative AI using **CrewAI** and sequential processes. |
 | **8-9** | **Tools & Search** | `day8_search.py`, `day9_custom_tool.py` | Integrating Web Search (Serper) and custom Python `@tool` decorators. |
 | **10** | **Human-in-the-Loop** | `day10_hitl.py` | Adding human approval gates (`human_input=True`) to agent tasks. |
+| **11** | **Persistent Memory** | `day11_memory.py` | Implementing Short/Long-term and Entity memory with vector DBs. |
+| **12** | **RAG & Knowledge** | `day12_knowledge.py` | Using `FileReadTool` to ground agents in private `.txt` documentation. |
+| **13** | **Async Execution** | `day13_async.py` | Parallel task processing (`async_execution=True`) vs. sequential flow. |
+| **14** | **Structured Output** | `day14_output.py` | Forcing agents to return valid **JSON** using **Pydantic** schemas. |
+| **15** | **Agent Delegation** | `day15_delegation.py` | Manager-Worker patterns where agents "hire" specialists autonomously. |
+| **16** | **Agent Training** | `day16_training.py` | Human-feedback loops (`crew.train`) to optimize agent behavior. |
